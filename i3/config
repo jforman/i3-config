@@ -9,6 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# Mod key is Windows key
 set $mod Mod4
 
 workspace 1 output DVI-I-2
@@ -24,7 +25,7 @@ force_focus_wrapping no
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
 # chose a FreeType font, such as:
-font pango:DejaVu Sans Mono 10
+font xft:Ubuntu 11
 
 focus_follows_mouse no
 
@@ -32,8 +33,7 @@ focus_follows_mouse no
 floating_modifier $mod
 
 # start a terminal
-# bindsym $mod+Return exec i3-sensible-terminal -rv
-bindsym $mod+Return exec --no-startup-id urxvt
+bindsym $mod+Return exec ssh-agent i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -43,7 +43,7 @@ bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+Left focus left
@@ -111,14 +111,15 @@ mode "resize" {
 
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Right resize grow height 10 px or 10 ppt
-        bindsym Down resize shrink height 10 px or 10 ppt
-        bindsym Up resize grow width 10 px or 10 ppt
+        # Pressing down will shrink the window’s height.
+        # Pressing up will grow the window’s height.
 
-        # back to normal: Enter or Escape
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Down resize shrink height 10 px or 10 ppt
+        bindsym Up resize grow height 10 px or 10 ppt
+
+        # back to normal: Escape
         bindsym Escape mode "default"
 }
 
@@ -128,15 +129,16 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 
 bar {
-        status_command i3status --config ~/.i3/i3status.conf
-	#status_command ~/.i3/my_i3status.sh | ~/.i3/i3status_wrapper.pl
-	tray_output primary
+    status_command i3status --config ~/.i3/i3status.conf
+    tray_output primary
+    font xft:Ubuntu 11
+    position top
 }
 
 # Mixer Keyboard Shortcuts
 # TODO: Figure out how to toggle mute with 'mixer'
-bindsym F2 exec --no-startup-id mixer vol -5
-bindsym F3 exec --no-startup-id mixer vol +5
+bindsym F2 exec --no-startup-id amixer set Master 3-
+bindsym F3 exec --no-startup-id amixer set Master 3+
 
 # Rhythmbox Keyboard Shortcuts
 bindsym F5 exec --no-startup-id rhythmbox-client --play-pause
@@ -144,14 +146,20 @@ bindsym F6 exec --no-startup-id rhythmbox-client --pause
 bindsym F7 exec --no-startup-id rhythmbox-client --previous
 bindsym F8 exec --no-startup-id rhythmbox-client --next
 
-assign [title="FOO.com Mail"] 4
+bindsym $mod+l exec --no-startup-id xscreensaver-command --activate
+
+assign [title="Foo.com Mail"] 4
 assign [class="Rhythmbox"] 3
 for_window [class="I3-exit" instance="i3-exit"] floating enable
-
+for_window [title="Ubuntu Software Center"] floating enable
 
 # Startup Commands
+# Starting up chrome on specific workspaces doesn't quite work (yet).
 exec --no-startup-id /usr/local/bin/xrdb ~/.Xresources
-exec --no-startup-id i3-msg 'workspace 2; exec chrome --user-data-dir "/home/${USER}/.config/chromium/Profile 1/"'
-exec --no-startup-id i3-msg 'workspace 4; exec chrome --user-data-dir "/home/${USER}/.config/chromium/Profile 2/"'
-exec --no-startup-id i3-msg 'workspace 3; exec rhythmbox'
-exec --no-startup-id i3-msg 'workspace 1; exec i3-sensible-terminal; workspace 1'
+exec --no-startup-id xscreensaver -no-splash
+exec --no-startup-id nm-applet
+exec --no-startup-id ~/.dropbox-dist/dropboxd
+exec i3-msg 'workspace 2; exec google-chrome --profile-directory="Profile 1"'
+exec i3-msg 'workspace 4; exec google-chrome --profile-directory="Profile 2"'
+exec i3-msg 'workspace 3; exec rhythmbox'
+exec i3-msg 'workspace 1; exec i3-sensible-terminal'
