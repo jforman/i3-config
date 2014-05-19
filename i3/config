@@ -5,10 +5,16 @@
 set $mod Mod4
 set $alt Mod1
 
+new_window pixel 2
+new_float pixel 2
+
 workspace 1 output DVI-I-2
 workspace 2 output DVI-I-3
 workspace 3 output DVI-I-2
 workspace 4 output DVI-I-3
+
+set $monitor_left DVI-I-2
+set $monitor_right DVI-I-3
 
 force_focus_wrapping no
 font xft:Ubuntu 11
@@ -81,8 +87,8 @@ bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 
 # WIP: change workspaces on both screens at once
-bindsym $mod+$alt+Left focus output $monitor_left; workspace prev; focus output $monitor_right; workspace prev
-bindsym $mod+$alt+Right focus output $monitor_left; workspace next; focus output $monitor_right; workspace next
+bindsym $mod+$alt+Left focus output left; workspace prev; focus output right; workspace prev
+bindsym $mod+$alt+Right focus output left; workspace next; focus output right; workspace next
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
@@ -126,7 +132,7 @@ bindsym F8 exec --no-startup-id rhythmbox-client --next
 bindsym XF86AudioPrev exec --no-startup-id rhythmbox-client --previous
 bindsym XF86AudioNext exec --no-startup-id rhythmbox-client --next
 
-bindsym $mod+l exec --no-startup-id i3lock -c 000000
+bindsym $mod+l exec --no-startup-id i3lock -c 000000 -d
 
 assign [title="Google.com Mail"] 4
 assign [class="Rhythmbox"] 3
@@ -138,13 +144,13 @@ for_window [class="Eog"] floating enable
 
 # Startup Commands
 exec --no-startup-id /usr/local/bin/xrdb ~/.Xresources
-exec --no-startup-id i3lock -c 000000
+exec --no-startup-id i3lock -c 000000 -a
 exec --no-startup-id nm-applet
 exec --no-startup-id ~/.dropbox-dist/dropboxd
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 exec --no-startup-id gnome-sound-applet
-exec i3-msg 'workspace 2; exec google-chrome --profile-directory="Profile 1"'
-exec i3-msg 'workspace 4; exec google-chrome --profile-directory="Profile 2"'
+exec i3-msg 'workspace 2; exec google-chrome --profile-directory="Default"'
+exec i3-msg 'workspace 4; exec google-chrome --profile-directory="Profile 1"'
 exec i3-msg 'workspace 3; exec rhythmbox'
 exec i3-msg 'workspace 1; exec i3-sensible-terminal'
 
