@@ -86,9 +86,9 @@ bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 
-# WIP: change workspaces on both screens at once
-bindsym $mod+$alt+Left focus output left; workspace prev; focus output right; workspace prev
-bindsym $mod+$alt+Right focus output left; workspace next; focus output right; workspace next
+# Cycle through workspaces on both screens at once
+bindsym $mod+$alt+Left focus output left; workspace prev_on_output; focus output right; workspace prev_on_output
+bindsym $mod+$alt+Right focus output left; workspace next_on_output; focus output right; workspace next_on_output
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
